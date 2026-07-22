@@ -8,83 +8,206 @@
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <conv:MetricStatusToBrushConverter x:Key="StatusToBrush" />
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="{StaticResource PopupBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="6,4" />
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryLightBrush}" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryLightBrush}" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal">
+                            <Border x:Name="Box" Width="16" Height="16" CornerRadius="4"
+                                    BorderBrush="{StaticResource PopupBorderBrush}" BorderThickness="1"
+                                    Background="Transparent" VerticalAlignment="Center">
+                                <Path x:Name="Check" Data="M 3,8 L 6.5,11.5 L 13,4" Stroke="White" StrokeThickness="2"
+                                      StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"
+                                      Visibility="Collapsed" />
+                            </Border>
+                            <ContentPresenter Margin="8,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Box" Property="Background" Value="{StaticResource AccentBrush}" />
+                                <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource AccentBrush}" />
+                                <Setter TargetName="Check" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="0,7" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg" Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="#2E7BEF" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="#2062D6" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="AccentSliderStyle" TargetType="Slider">
+            <Setter Property="Height" Value="20" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid VerticalAlignment="Center">
+                            <Border Height="4" CornerRadius="2" Background="#E4E7EC" />
+                            <Track x:Name="PART_Track">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="Slider.DecreaseLarge">
+                                        <RepeatButton.Template>
+                                            <ControlTemplate TargetType="RepeatButton">
+                                                <Border Height="4" CornerRadius="2" Background="{StaticResource AccentBrush}" />
+                                            </ControlTemplate>
+                                        </RepeatButton.Template>
+                                    </RepeatButton>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="Slider.IncreaseLarge">
+                                        <RepeatButton.Template>
+                                            <ControlTemplate TargetType="RepeatButton">
+                                                <Border Background="Transparent" />
+                                            </ControlTemplate>
+                                        </RepeatButton.Template>
+                                    </RepeatButton>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Width="14" Height="14">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Ellipse Fill="White" Stroke="{StaticResource AccentBrush}" StrokeThickness="2" />
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
-    <StackPanel Margin="12">
-        <TextBlock Text="{Binding CpuUsagePercent, StringFormat='CPU 사용률: {0:F0}%'}"
-                   Foreground="{Binding CpuStatus, Converter={StaticResource StatusToBrush}}" FontSize="16" />
-        <TextBlock Text="{Binding MemoryUsagePercent, StringFormat='메모리 사용률: {0:F0}%'}"
-                   Foreground="{Binding MemoryStatus, Converter={StaticResource StatusToBrush}}" FontSize="16" />
-        <TextBlock Text="{Binding GpuUsagePercent, StringFormat='GPU 사용률: {0:F0}%'}"
-                   Foreground="{Binding GpuStatus, Converter={StaticResource StatusToBrush}}" FontSize="16" />
-        <TextBlock Text="{Binding DiskUsagePercent, StringFormat='디스크 사용률: {0:F0}%'}"
-                   Foreground="{Binding DiskStatus, Converter={StaticResource StatusToBrush}}" FontSize="16" />
-        <TextBlock Text="{Binding NetworkUsagePercent, StringFormat='네트워크 사용률: {0:F0}%'}"
-                   Foreground="{Binding NetworkStatus, Converter={StaticResource StatusToBrush}}" FontSize="16" />
 
-        <Separator Margin="0,10" />
-        <TextBlock Text="경고 임계값 (%)" FontWeight="Bold" Margin="0,0,0,6" />
+    <Border Background="{StaticResource PopupSurfaceBrush}" Padding="16">
+        <StackPanel>
+            <TextBlock Text="SysMonWidget — 상세" FontWeight="SemiBold" FontSize="13"
+                       Foreground="{StaticResource TextPrimaryLightBrush}" Margin="0,0,0,10" />
+            <TextBlock Text="{Binding CpuUsagePercent, StringFormat='CPU 사용률: {0:F0}%'}"
+                       Foreground="{Binding CpuStatus, Converter={StaticResource StatusToBrush}, ConverterParameter=Light}" FontSize="16" />
+            <TextBlock Text="{Binding MemoryUsagePercent, StringFormat='메모리 사용률: {0:F0}%'}"
+                       Foreground="{Binding MemoryStatus, Converter={StaticResource StatusToBrush}, ConverterParameter=Light}" FontSize="16" />
+            <TextBlock Text="{Binding GpuUsagePercent, StringFormat='GPU 사용률: {0:F0}%'}"
+                       Foreground="{Binding GpuStatus, Converter={StaticResource StatusToBrush}, ConverterParameter=Light}" FontSize="16" />
+            <TextBlock Text="{Binding DiskUsagePercent, StringFormat='디스크 사용률: {0:F0}%'}"
+                       Foreground="{Binding DiskStatus, Converter={StaticResource StatusToBrush}, ConverterParameter=Light}" FontSize="16" />
+            <TextBlock Text="{Binding NetworkUsagePercent, StringFormat='네트워크 사용률: {0:F0}%'}"
+                       Foreground="{Binding NetworkStatus, Converter={StaticResource StatusToBrush}, ConverterParameter=Light}" FontSize="16" />
 
-        <Grid Margin="0,2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="CPU" VerticalAlignment="Center" />
-            <TextBox x:Name="CpuWarningBox" Grid.Column="1" Margin="2" />
-            <TextBox x:Name="CpuCriticalBox" Grid.Column="2" Margin="2" />
-        </Grid>
-        <Grid Margin="0,2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="메모리" VerticalAlignment="Center" />
-            <TextBox x:Name="MemoryWarningBox" Grid.Column="1" Margin="2" />
-            <TextBox x:Name="MemoryCriticalBox" Grid.Column="2" Margin="2" />
-        </Grid>
-        <Grid Margin="0,2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="GPU" VerticalAlignment="Center" />
-            <TextBox x:Name="GpuWarningBox" Grid.Column="1" Margin="2" />
-            <TextBox x:Name="GpuCriticalBox" Grid.Column="2" Margin="2" />
-        </Grid>
-        <Grid Margin="0,2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="디스크" VerticalAlignment="Center" />
-            <TextBox x:Name="DiskWarningBox" Grid.Column="1" Margin="2" />
-            <TextBox x:Name="DiskCriticalBox" Grid.Column="2" Margin="2" />
-        </Grid>
-        <Grid Margin="0,2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="네트워크" VerticalAlignment="Center" />
-            <TextBox x:Name="NetworkWarningBox" Grid.Column="1" Margin="2" />
-            <TextBox x:Name="NetworkCriticalBox" Grid.Column="2" Margin="2" />
-        </Grid>
+            <Separator Margin="0,10" />
+            <TextBlock Text="경고 임계값 (%)" FontWeight="Bold" Margin="0,0,0,6" />
 
-        <CheckBox x:Name="RunAtStartupCheckBox" Content="Windows 시작 시 자동 실행" Margin="0,10,0,0" />
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="CPU" VerticalAlignment="Center" />
+                <TextBox x:Name="CpuWarningBox" Grid.Column="1" Margin="2" />
+                <TextBox x:Name="CpuCriticalBox" Grid.Column="2" Margin="2" />
+            </Grid>
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="메모리" VerticalAlignment="Center" />
+                <TextBox x:Name="MemoryWarningBox" Grid.Column="1" Margin="2" />
+                <TextBox x:Name="MemoryCriticalBox" Grid.Column="2" Margin="2" />
+            </Grid>
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="GPU" VerticalAlignment="Center" />
+                <TextBox x:Name="GpuWarningBox" Grid.Column="1" Margin="2" />
+                <TextBox x:Name="GpuCriticalBox" Grid.Column="2" Margin="2" />
+            </Grid>
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="디스크" VerticalAlignment="Center" />
+                <TextBox x:Name="DiskWarningBox" Grid.Column="1" Margin="2" />
+                <TextBox x:Name="DiskCriticalBox" Grid.Column="2" Margin="2" />
+            </Grid>
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="네트워크" VerticalAlignment="Center" />
+                <TextBox x:Name="NetworkWarningBox" Grid.Column="1" Margin="2" />
+                <TextBox x:Name="NetworkCriticalBox" Grid.Column="2" Margin="2" />
+            </Grid>
 
-        <Separator Margin="0,10" />
-        <TextBlock Text="위젯 투명도" FontWeight="Bold" Margin="0,0,0,6" />
-        <Slider x:Name="OpacitySlider" Minimum="0.3" Maximum="1.0"
-                TickFrequency="0.1" ValueChanged="OpacitySlider_ValueChanged" />
+            <CheckBox x:Name="RunAtStartupCheckBox" Content="Windows 시작 시 자동 실행" Margin="0,10,0,0" />
 
-        <Button x:Name="SaveButton" Content="저장" Margin="0,10,0,0" Click="SaveButton_Click" />
-        <TextBlock x:Name="SaveConfirmationText" Text="저장되었습니다"
-                   Foreground="#4CAF50" Margin="0,6,0,0"
-                   Visibility="Collapsed" />
-    </StackPanel>
+            <Separator Margin="0,10" />
+            <TextBlock Text="위젯 투명도" FontWeight="Bold" Margin="0,0,0,6" />
+            <Slider x:Name="OpacitySlider" Minimum="0.3" Maximum="1.0"
+                    TickFrequency="0.1" ValueChanged="OpacitySlider_ValueChanged"
+                    Style="{StaticResource AccentSliderStyle}" />
+
+            <Button x:Name="SaveButton" Content="저장" Margin="0,14,0,0" Click="SaveButton_Click" Style="{StaticResource PrimaryButtonStyle}" />
+            <TextBlock x:Name="SaveConfirmationText" Text="저장되었습니다"
+                       Foreground="{StaticResource StatusNormalLightBrush}" Margin="0,6,0,0"
+                       Visibility="Collapsed" />
+        </StackPanel>
+    </Border>
 </Window>
