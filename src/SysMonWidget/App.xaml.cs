@@ -28,6 +28,7 @@ public partial class App : Application
         AppDomain.CurrentDomain.UnhandledException += OnAppDomainUnhandledException;
 
         _settingsService = new SettingsService();
+        var isFirstLaunch = !_settingsService.SettingsFileExists();
         _appSettings = _settingsService.Load();
 
         _aggregator = new MetricsAggregator(
@@ -44,7 +45,8 @@ public partial class App : Application
         _widgetWindow.TogglePopupRequested += OnTogglePopupRequested;
         _widgetWindow.Show();
 
-        _trayIconManager = new TrayIconManager(_widgetWindow);
+        _trayIconManager = new TrayIconManager(_widgetWindow, isFirstLaunch);
+        _trayIconManager.OpenSettingsRequested += OnTogglePopupRequested;
 
         _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         _timer.Tick += async (_, _) =>
