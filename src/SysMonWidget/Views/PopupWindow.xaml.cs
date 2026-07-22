@@ -60,6 +60,8 @@ public partial class PopupWindow : Window
             .SetEnabled(RunAtStartupCheckBox.IsChecked == true);
 
         ThresholdsSaved?.Invoke(this, _thresholds);
+
+        SaveConfirmationText.Visibility = Visibility.Visible;
     }
 
     private static double ParseOrDefault(string text, double fallback) =>
