@@ -23,17 +23,44 @@
     <Border Padding="16" CornerRadius="8" Background="#1E1E1E" MinWidth="150"
             ToolTip="드래그하여 위치 이동 · 우클릭으로 상세 설정 열기"
             ToolTipService.InitialShowDelay="500">
-        <StackPanel>
-            <TextBlock Text="{Binding CpuUsagePercent, StringFormat='CPU {0:F0}%'}"
-                       Foreground="{Binding CpuStatus, Converter={StaticResource StatusToBrush}}" />
-            <TextBlock Text="{Binding MemoryUsagePercent, StringFormat='RAM {0:F0}%'}"
-                       Foreground="{Binding MemoryStatus, Converter={StaticResource StatusToBrush}}" />
-            <TextBlock Text="{Binding GpuUsagePercent, StringFormat='GPU {0:F0}%'}"
-                       Foreground="{Binding GpuStatus, Converter={StaticResource StatusToBrush}}" />
-            <TextBlock Text="{Binding DiskUsagePercent, StringFormat='DISK {0:F0}%'}"
-                       Foreground="{Binding DiskStatus, Converter={StaticResource StatusToBrush}}" />
-            <TextBlock Text="{Binding NetworkUsagePercent, StringFormat='NET {0:F0}%'}"
-                       Foreground="{Binding NetworkStatus, Converter={StaticResource StatusToBrush}}" />
-        </StackPanel>
+        <Grid>
+            <StackPanel Margin="0,0,16,0">
+                <TextBlock Text="{Binding CpuUsagePercent, StringFormat='CPU {0:F0}%'}"
+                           Foreground="{Binding CpuStatus, Converter={StaticResource StatusToBrush}}" />
+                <TextBlock Text="{Binding MemoryUsagePercent, StringFormat='RAM {0:F0}%'}"
+                           Foreground="{Binding MemoryStatus, Converter={StaticResource StatusToBrush}}" />
+                <TextBlock Text="{Binding GpuUsagePercent, StringFormat='GPU {0:F0}%'}"
+                           Foreground="{Binding GpuStatus, Converter={StaticResource StatusToBrush}}" />
+                <TextBlock Text="{Binding DiskUsagePercent, StringFormat='DISK {0:F0}%'}"
+                           Foreground="{Binding DiskStatus, Converter={StaticResource StatusToBrush}}" />
+                <TextBlock Text="{Binding NetworkUsagePercent, StringFormat='NET {0:F0}%'}"
+                           Foreground="{Binding NetworkStatus, Converter={StaticResource StatusToBrush}}" />
+            </StackPanel>
+
+            <Button x:Name="MenuButton"
+                    Content="⋮"
+                    Width="20" Height="20"
+                    Padding="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="#CCCCCC"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Cursor="Hand"
+                    Focusable="False"
+                    ToolTip="메뉴"
+                    Click="MenuButton_Click">
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="설정 열기" Click="OpenSettingsMenuItem_Click" />
+                        <MenuItem Header="위젯 숨기기" Click="HideWidgetMenuItem_Click" />
+                        <Separator />
+                        <MenuItem Header="종료" Click="ExitMenuItem_Click" />
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+        </Grid>
     </Border>
 </Window>
