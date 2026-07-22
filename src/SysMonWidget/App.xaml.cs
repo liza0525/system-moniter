@@ -71,12 +71,13 @@ public partial class App : Application
 
     private void OnTogglePopupRequested(object? sender, EventArgs e)
     {
-        var popup = new PopupWindow(_viewModel!, _appSettings!.Thresholds);
+        var popup = new PopupWindow(_viewModel!, _appSettings!.Thresholds, _widgetWindow!.Opacity);
         popup.ThresholdsSaved += (_, updatedThresholds) =>
         {
             _appSettings.Thresholds = updatedThresholds;
             _settingsService!.Save(_appSettings);
         };
+        popup.OpacityChanged += (_, opacity) => _widgetWindow!.Opacity = opacity;
         popup.Show();
     }
 

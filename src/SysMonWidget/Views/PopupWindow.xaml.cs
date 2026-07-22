@@ -11,8 +11,9 @@ public partial class PopupWindow : Window
     private readonly ThresholdSettings _thresholds;
 
     public event EventHandler<ThresholdSettings>? ThresholdsSaved;
+    public event EventHandler<double>? OpacityChanged;
 
-    public PopupWindow(WidgetViewModel viewModel, ThresholdSettings thresholds)
+    public PopupWindow(WidgetViewModel viewModel, ThresholdSettings thresholds, double currentOpacity)
     {
         InitializeComponent();
         DataContext = viewModel;
@@ -31,6 +32,13 @@ public partial class PopupWindow : Window
         NetworkCriticalBox.Text = thresholds.Network.CriticalPercent.ToString();
 
         RunAtStartupCheckBox.IsChecked = new StartupRegistrationService(Environment.ProcessPath!).IsEnabled();
+
+        OpacitySlider.Value = currentOpacity;
+    }
+
+    private void OpacitySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        OpacityChanged?.Invoke(this, e.NewValue);
     }
 
     private void SaveButton_Click(object sender, RoutedEventArgs e)
