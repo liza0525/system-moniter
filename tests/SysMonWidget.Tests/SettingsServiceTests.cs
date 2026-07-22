@@ -33,6 +33,23 @@ public class SettingsServiceTests : IDisposable
         Assert.True(loaded.RunAtStartup);
     }
 
+    [Fact]
+    public void SettingsFileExists_WhenFileDoesNotExist_ReturnsFalse()
+    {
+        var sut = new SettingsService(_tempFile);
+
+        Assert.False(sut.SettingsFileExists());
+    }
+
+    [Fact]
+    public void SettingsFileExists_AfterSave_ReturnsTrue()
+    {
+        var sut = new SettingsService(_tempFile);
+        sut.Save(new AppSettings());
+
+        Assert.True(sut.SettingsFileExists());
+    }
+
     public void Dispose()
     {
         if (File.Exists(_tempFile)) File.Delete(_tempFile);

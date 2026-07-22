@@ -15,6 +15,8 @@ public class SettingsService
             "SysMonWidget", "settings.json");
     }
 
+    public bool SettingsFileExists() => File.Exists(_filePath);
+
     public AppSettings Load()
     {
         if (!File.Exists(_filePath))
