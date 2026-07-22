@@ -5,7 +5,7 @@
         Title="SysMonWidget"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="#1E1E1E"
+        Background="Transparent"
         Topmost="True"
         ShowInTaskbar="False"
         ResizeMode="NoResize"
@@ -14,17 +14,75 @@
         MouseRightButtonUp="Window_MouseRightButtonUp">
     <Window.Resources>
         <conv:MetricStatusToBrushConverter x:Key="StatusToBrush" />
-        <Style TargetType="TextBlock">
-            <Setter Property="FontSize" Value="18" />
+
+        <Style x:Key="KebabButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryDarkBrush}" />
+            <Setter Property="FontSize" Value="16" />
             <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Margin" Value="0,3" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bg" Background="{TemplateBinding Background}" CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="#14FFFFFF" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bg" Property="Background" Value="#22FFFFFF" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
-    <Border Padding="16" CornerRadius="8" Background="#1E1E1E" MinWidth="150"
+    <Border Padding="14,10,14,16" CornerRadius="14" MinWidth="160"
+            Background="{StaticResource WidgetSurfaceBrush}"
+            BorderBrush="{StaticResource WidgetBorderBrush}"
+            BorderThickness="1"
             ToolTip="드래그하여 위치 이동 · 우클릭으로 상세 설정 열기"
             ToolTipService.InitialShowDelay="500">
-        <Grid>
-            <StackPanel Margin="0,0,16,0">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000" Opacity="0.35" BlurRadius="24" ShadowDepth="6" Direction="270" />
+        </Border.Effect>
+        <StackPanel>
+            <Grid>
+                <Button x:Name="MenuButton"
+                        Content="⋮"
+                        Width="22" Height="22"
+                        Padding="0"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource KebabButtonStyle}"
+                        ToolTip="메뉴"
+                        Click="MenuButton_Click">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="설정 열기" Click="OpenSettingsMenuItem_Click" />
+                            <MenuItem Header="위젯 숨기기" Click="HideWidgetMenuItem_Click" />
+                            <Separator />
+                            <MenuItem Header="종료" Click="ExitMenuItem_Click" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+            </Grid>
+
+            <Border Height="1" Background="{StaticResource WidgetBorderBrush}" Margin="0,4,0,8" />
+
+            <StackPanel>
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Setter Property="FontSize" Value="15" />
+                        <Setter Property="FontWeight" Value="SemiBold" />
+                        <Setter Property="Foreground" Value="{StaticResource TextPrimaryDarkBrush}" />
+                        <Setter Property="Margin" Value="0,3" />
+                    </Style>
+                </StackPanel.Resources>
                 <TextBlock Text="{Binding CpuUsagePercent, StringFormat='CPU {0:F0}%'}"
                            Foreground="{Binding CpuStatus, Converter={StaticResource StatusToBrush}}" />
                 <TextBlock Text="{Binding MemoryUsagePercent, StringFormat='RAM {0:F0}%'}"
@@ -36,31 +94,6 @@
                 <TextBlock Text="{Binding NetworkUsagePercent, StringFormat='NET {0:F0}%'}"
                            Foreground="{Binding NetworkStatus, Converter={StaticResource StatusToBrush}}" />
             </StackPanel>
-
-            <Button x:Name="MenuButton"
-                    Content="⋮"
-                    Width="20" Height="20"
-                    Padding="0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Foreground="#CCCCCC"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Cursor="Hand"
-                    Focusable="False"
-                    ToolTip="메뉴"
-                    Click="MenuButton_Click">
-                <Button.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="설정 열기" Click="OpenSettingsMenuItem_Click" />
-                        <MenuItem Header="위젯 숨기기" Click="HideWidgetMenuItem_Click" />
-                        <Separator />
-                        <MenuItem Header="종료" Click="ExitMenuItem_Click" />
-                    </ContextMenu>
-                </Button.ContextMenu>
-            </Button>
-        </Grid>
+        </StackPanel>
     </Border>
 </Window>
