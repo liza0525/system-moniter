@@ -20,7 +20,9 @@
             <Setter Property="Margin" Value="0,3" />
         </Style>
     </Window.Resources>
-    <Border Padding="16" CornerRadius="8" Background="#1E1E1E" MinWidth="150">
+    <Border Padding="16" CornerRadius="8" Background="#1E1E1E" MinWidth="150"
+            ToolTip="드래그하여 위치 이동 · 우클릭으로 상세 설정 열기"
+            ToolTipService.InitialShowDelay="500">
         <StackPanel>
             <TextBlock Text="{Binding CpuUsagePercent, StringFormat='CPU {0:F0}%'}"
                        Foreground="{Binding CpuStatus, Converter={StaticResource StatusToBrush}}" />
