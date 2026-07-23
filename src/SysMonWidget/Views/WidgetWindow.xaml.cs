@@ -59,11 +59,6 @@ public partial class WidgetWindow : Window
         TogglePopupRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    private void HideWidgetMenuItem_Click(object sender, RoutedEventArgs e)
-    {
-        Visibility = Visibility.Hidden;
-    }
-
     private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
     {
         Application.Current.Shutdown();

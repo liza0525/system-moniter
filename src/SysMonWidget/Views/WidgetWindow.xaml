@@ -64,7 +64,6 @@
                     <Button.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="설정 열기" Click="OpenSettingsMenuItem_Click" />
-                            <MenuItem Header="위젯 숨기기" Click="HideWidgetMenuItem_Click" />
                             <Separator />
                             <MenuItem Header="종료" Click="ExitMenuItem_Click" />
                         </ContextMenu>

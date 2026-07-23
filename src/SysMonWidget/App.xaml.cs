@@ -45,7 +45,7 @@ public partial class App : Application
         _widgetWindow.TogglePopupRequested += OnTogglePopupRequested;
         _widgetWindow.Show();
 
-        _trayIconManager = new TrayIconManager(_widgetWindow, isFirstLaunch);
+        _trayIconManager = new TrayIconManager(isFirstLaunch);
         _trayIconManager.OpenSettingsRequested += OnTogglePopupRequested;
 
         _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
