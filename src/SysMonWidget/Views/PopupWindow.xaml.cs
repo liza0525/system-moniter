@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Threading;
 using SysMonWidget.Models;
 using SysMonWidget.Services;
 using SysMonWidget.ViewModels;
@@ -9,6 +10,7 @@ public partial class PopupWindow : Window
 {
     private readonly WidgetViewModel _viewModel;
     private readonly ThresholdSettings _thresholds;
+    private readonly DispatcherTimer _saveConfirmationTimer;
 
     public event EventHandler<ThresholdSettings>? ThresholdsSaved;
     public event EventHandler<double>? OpacityChanged;
@@ -19,6 +21,13 @@ public partial class PopupWindow : Window
         DataContext = viewModel;
         _viewModel = viewModel;
         _thresholds = thresholds;
+
+        _saveConfirmationTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(3) };
+        _saveConfirmationTimer.Tick += (_, _) =>
+        {
+            _saveConfirmationTimer.Stop();
+            SaveConfirmationPopup.IsOpen = false;
+        };
 
         CpuWarningBox.Text = thresholds.Cpu.WarningPercent.ToString();
         CpuCriticalBox.Text = thresholds.Cpu.CriticalPercent.ToString();
@@ -61,7 +70,9 @@ public partial class PopupWindow : Window
 
         ThresholdsSaved?.Invoke(this, _thresholds);
 
-        SaveConfirmationText.Visibility = Visibility.Visible;
+        _saveConfirmationTimer.Stop();
+        SaveConfirmationPopup.IsOpen = true;
+        _saveConfirmationTimer.Start();
     }
 
     private static double ParseOrDefault(string text, double fallback) =>

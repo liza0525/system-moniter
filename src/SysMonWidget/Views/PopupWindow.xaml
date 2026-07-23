@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:conv="clr-namespace:SysMonWidget.Converters"
         Title="SysMonWidget - 상세"
+        Icon="pack://application:,,,/Assets/app.ico"
         Width="320" SizeToContent="Height"
         Topmost="True"
         WindowStartupLocation="CenterScreen">
@@ -127,6 +128,7 @@
         </Style>
     </Window.Resources>
 
+    <Grid>
     <Border Background="{StaticResource PopupSurfaceBrush}" Padding="16">
         <StackPanel>
             <TextBlock Text="SysMonWidget — 상세" FontWeight="SemiBold" FontSize="13"
@@ -205,9 +207,16 @@
                     Style="{StaticResource AccentSliderStyle}" />
 
             <Button x:Name="SaveButton" Content="저장" Margin="0,14,0,0" Click="SaveButton_Click" Style="{StaticResource PrimaryButtonStyle}" />
-            <TextBlock x:Name="SaveConfirmationText" Text="저장되었습니다"
-                       Foreground="{StaticResource StatusNormalLightBrush}" Margin="0,6,0,0"
-                       Visibility="Collapsed" />
         </StackPanel>
     </Border>
+
+    <Popup x:Name="SaveConfirmationPopup" PlacementTarget="{Binding ElementName=SaveButton}"
+           Placement="Bottom" HorizontalOffset="0" VerticalOffset="6"
+           AllowsTransparency="True" IsOpen="False" StaysOpen="True">
+        <Border Background="{StaticResource PopupSurfaceBrush}" BorderBrush="{StaticResource PopupBorderBrush}"
+                BorderThickness="1" CornerRadius="6" Padding="10,6">
+            <TextBlock Text="저장되었습니다" Foreground="{StaticResource StatusNormalLightBrush}" FontSize="12" />
+        </Border>
+    </Popup>
+    </Grid>
 </Window>
